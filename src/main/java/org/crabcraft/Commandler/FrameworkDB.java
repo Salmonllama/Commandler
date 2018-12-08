@@ -27,7 +27,7 @@ public class FrameworkDB {
     }
 
     public static void firstTimeSetup() {
-        // Check if nexbot.db exists, if not, create it.
+        // Check if cmdframework.db exists, if not, create it.
         if (new File("cmdframework.db").exists()) {
             System.out.println("FrameworkDB exists, no need for further action.");
         }
