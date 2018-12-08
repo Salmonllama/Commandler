@@ -17,7 +17,7 @@ public class FrameworkDB {
 
         Connection connection = null;
         try {
-            connection = DriverManager.getConnection("jdbc:sqlite:nexbot.db");
+            connection = DriverManager.getConnection("jdbc:sqlite:cmdframework.db");
         }
         catch (SQLException e) {
             e.printStackTrace();
