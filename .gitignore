@@ -1,8 +1,27 @@
 .gradle
 build/
+bin/
+
+# Ignore any sqlite databases created
+*.db
+
+# Stupid IntelliJ stuff
+.idea
+*.iml
+
+# Stupid VSCode stuff
+.vscode
+
+# Stupid Eclipse project files
+.classpath
+.project
+.settings
 
 # Ignore Gradle GUI config
 gradle-app.setting
 
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar
+
+# Ignore live config file
+config.properties
