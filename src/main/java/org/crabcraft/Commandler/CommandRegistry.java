@@ -5,7 +5,7 @@ import org.javacord.api.DiscordApi;
 import java.util.TreeMap;
 
 public class CommandRegistry {
-    private final DiscordApi api;
+    private DiscordApi api;
     private static TreeMap<String, Command> commands;
 
     public CommandRegistry(DiscordApi dApi) {
@@ -15,10 +15,15 @@ public class CommandRegistry {
         FrameworkConfig.firstTimeSetup();
         FrameworkDB.firstTimeSetup();
 
-        this.api = dApi;
-        this.api.addServerJoinListener(event -> {
-            FrameworkDB.serverFirstTimeSetup(event.getServer().getName(), event.getServer().getIdAsString());
-        });
+        try {
+            this.api = dApi;
+            this.api.addServerJoinListener(event -> {
+                FrameworkDB.serverFirstTimeSetup(event.getServer().getName(), event.getServer().getIdAsString());
+            });
+        }
+        catch (NullPointerException e) {
+            // ignore
+        }
     }
 
     public Command registerCommand(Command command) {

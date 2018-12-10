@@ -56,7 +56,14 @@ public class FrameworkConfig {
      }
 
     public static String getToken() {
-        return loadConfigFile().getProperty("token");
+        try {
+            return loadConfigFile().getProperty("token");
+        }
+        catch (NullPointerException e) {
+            // ignore
+        }
+
+        return "not-a-token";
      }
 
     public static String getDefaultPrefix() {
