@@ -42,7 +42,7 @@ public class FrameworkConfig {
             input = new FileInputStream(fileName);
         }
         catch (FileNotFoundException e) {
-            System.out.println("Couldn't find config file" + e);
+            System.out.println("Couldn't find config file " + e);
         }
 
         try {
