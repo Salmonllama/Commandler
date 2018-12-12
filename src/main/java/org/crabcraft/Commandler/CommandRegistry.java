@@ -8,7 +8,7 @@ public class CommandRegistry {
     private DiscordApi api;
     private static TreeMap<String, Command> commands;
 
-    public CommandRegistry(DiscordApi dApi) {
+    public CommandRegistry() {
         commands = new TreeMap<>();
 
         // Run Config and DB setups
