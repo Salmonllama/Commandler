@@ -38,7 +38,7 @@ public class FrameworkDB {
         }
     }
 
-    static void serverFirstTimeSetup(String serverName, String serverId) {
+    static void serverFirstTimeSetup(String serverPrefix, String serverId) {
         // When a server is joined, this is called to add it to the database table.
         Connection conn = connectionSetup();
 
@@ -54,13 +54,15 @@ public class FrameworkDB {
             e.printStackTrace();
         }
 
+        System.out.println(serverPrefix);
+
         try {
             // Add the server data into the table
             Statement stmt = conn.createStatement();
             stmt.execute("INSERT INTO serverconf"
                             + "(serverId, prefix)"
                             + "VALUES"
-                            + "(" + serverId + ", " + FrameworkConfig.getDefaultPrefix() + ")"
+                            + "(" + serverId + ", " + serverPrefix + ")"
             );
         }
         catch (SQLException e) {

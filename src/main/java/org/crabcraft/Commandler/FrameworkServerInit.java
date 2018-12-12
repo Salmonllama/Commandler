@@ -6,6 +6,6 @@ import org.javacord.api.listener.server.ServerJoinListener;
 public class FrameworkServerInit implements ServerJoinListener {
 
     public void onServerJoin(ServerJoinEvent event) {
-        FrameworkDB.serverFirstTimeSetup(event.getServer().getName(), event.getServer().getIdAsString());
+        FrameworkDB.serverFirstTimeSetup(FrameworkConfig.getDefaultPrefix(), event.getServer().getIdAsString());
     }
 }
