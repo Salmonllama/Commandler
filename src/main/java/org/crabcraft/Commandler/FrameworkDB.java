@@ -59,7 +59,7 @@ public class FrameworkDB {
         try {
             // Add the server data into the table
 
-            String sql = ("INSERT INTO serverconf VALUES(?,?");
+            String sql = ("INSERT INTO serverconf VALUES(?,?)");
 
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, serverId);
