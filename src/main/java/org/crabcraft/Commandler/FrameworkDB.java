@@ -58,9 +58,14 @@ public class FrameworkDB {
 
         try {
             // Add the server data into the table
-            Statement stmt = conn.createStatement();
-            stmt.executeUpdate("INSERT INTO serverconf VALUES('"+serverId+"','"+serverPrefix+"')"
-            );
+
+            String sql = ("INSERT INTO serverconf VALUES(?,?");
+
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, serverId);
+            stmt.setString(2, serverPrefix);
+            stmt.executeUpdate();
+            stmt.close();
 
         }
         catch (SQLException e) {
@@ -84,7 +89,7 @@ public class FrameworkDB {
             Statement stmt = conn.createStatement();
             ResultSet results = stmt.executeQuery("SELECT prefix FROM serverconf WHERE serverId = " + serverId);
             prefix = results.getString("prefix");
-
+            System.out.println(prefix);
         }
         catch(SQLException e) {
             System.out.println(e.getMessage());
