@@ -59,11 +59,9 @@ public class FrameworkDB {
         try {
             // Add the server data into the table
             Statement stmt = conn.createStatement();
-            stmt.execute("INSERT INTO serverconf"
-                            + "(serverId, prefix)"
-                            + "VALUES"
-                            + "(" + serverId + ", " + serverPrefix + ")"
+            stmt.executeUpdate("INSERT INTO serverconf VALUES('"+serverId+"','"+serverPrefix+"')"
             );
+
         }
         catch (SQLException e) {
             e.printStackTrace();
