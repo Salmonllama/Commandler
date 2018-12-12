@@ -55,8 +55,6 @@ public class FrameworkDB {
             e.printStackTrace();
         }
 
-        System.out.println(serverPrefix);
-
         try {
             // Add the server data into the table
 
@@ -90,7 +88,6 @@ public class FrameworkDB {
             Statement stmt = conn.createStatement();
             ResultSet results = stmt.executeQuery("SELECT prefix FROM serverconf WHERE serverId = " + serverId);
             prefix = results.getString("prefix");
-            System.out.println(prefix);
 
             stmt.close();
             conn.close();
