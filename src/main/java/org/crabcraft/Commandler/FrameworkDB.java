@@ -58,7 +58,7 @@ public class FrameworkDB {
             // Add the server data into the table
             Statement stmt = conn.createStatement();
             stmt.execute("INSERT INTO serverconf"
-                            + "(serverId, serverName, prefix, logChannel)"
+                            + "(serverId, prefix)"
                             + "VALUES"
                             + "(" + serverId + "," + FrameworkConfig.getDefaultPrefix() + ")"
             );
