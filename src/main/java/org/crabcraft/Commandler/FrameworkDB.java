@@ -46,7 +46,7 @@ public class FrameworkDB {
             // Create the table if it doesn't exist
             Statement stmt = conn.createStatement();
             stmt.execute("CREATE TABLE IF NOT EXISTS serverconf"
-                            + "(serverId TEXT NOT NULL PRIMARY KEY, serverName TEXT NOT NULL,"
+                            + "(serverId TEXT NOT NULL PRIMARY KEY,"
                             + " prefix TEXT NOT NULL)");
             System.out.println("serverConf initialised");
         }
@@ -60,7 +60,7 @@ public class FrameworkDB {
             stmt.execute("INSERT INTO serverconf"
                             + "(serverId, serverName, prefix, logChannel)"
                             + "VALUES"
-                            + "(" + serverId + "," + serverName + "," + FrameworkConfig.getDefaultPrefix() + ")"
+                            + "(" + serverId + "," + FrameworkConfig.getDefaultPrefix() + ")"
             );
         }
         catch (SQLException e) {
