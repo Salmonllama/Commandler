@@ -14,16 +14,6 @@ public class CommandRegistry {
         // Run Config and DB setups
         FrameworkConfig.firstTimeSetup();
         FrameworkDB.firstTimeSetup();
-
-        try {
-            this.api = dApi;
-            this.api.addServerJoinListener(event -> {
-                FrameworkDB.serverFirstTimeSetup(event.getServer().getName(), event.getServer().getIdAsString());
-            });
-        }
-        catch (NullPointerException e) {
-            // ignore
-        }
     }
 
     public Command registerCommand(Command command) {
