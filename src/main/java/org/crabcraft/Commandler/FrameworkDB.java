@@ -49,6 +49,7 @@ public class FrameworkDB {
                             + "(serverId TEXT NOT NULL PRIMARY KEY,"
                             + " prefix TEXT NOT NULL)");
             System.out.println("serverConf initialised");
+            stmt.close();
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -90,6 +91,9 @@ public class FrameworkDB {
             ResultSet results = stmt.executeQuery("SELECT prefix FROM serverconf WHERE serverId = " + serverId);
             prefix = results.getString("prefix");
             System.out.println(prefix);
+
+            stmt.close();
+            conn.close();
         }
         catch(SQLException e) {
             System.out.println(e.getMessage());
