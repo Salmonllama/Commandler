@@ -60,7 +60,7 @@ public class FrameworkDB {
             stmt.execute("INSERT INTO serverconf"
                             + "(serverId, prefix)"
                             + "VALUES"
-                            + "(" + serverId + "," + FrameworkConfig.getDefaultPrefix() + ")"
+                            + "(" + serverId + ", " + FrameworkConfig.getDefaultPrefix() + ")"
             );
         }
         catch (SQLException e) {
