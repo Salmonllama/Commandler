@@ -50,7 +50,7 @@ public abstract class Command implements MessageCreateListener {
 
     private boolean isCommand(String string) {
         // Check if the string is a command or a command alias
-        return Aliases().contains(Command.cutPrefix(string)[0]);
+        return Aliases().contains(Command.cutPrefix(string.toLowerCase())[0]);
     }
 
     private String[] getCommandArgs(String message) {
