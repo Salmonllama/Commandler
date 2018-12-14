@@ -5,7 +5,7 @@ import java.sql.*;
 
 public class FrameworkDB {
 
-    public static Connection connectionSetup() {
+    static Connection connectionSetup() {
         // Establish the database connection and return the connection variable
         try {
             Class.forName("org.sqlite.JDBC");
@@ -26,7 +26,7 @@ public class FrameworkDB {
         return connection;
     }
 
-    public static void firstTimeSetup() {
+    static void firstTimeSetup() {
         // Check if cmdframework.db exists, if not, create it.
         if (new File("cmdframework.db").exists()) {
             System.out.println("FrameworkDB exists, no need for further action.");
@@ -79,7 +79,7 @@ public class FrameworkDB {
         }
     }
 
-    static String getServerPrefix(String serverId) {
+    public static String getServerPrefix(String serverId) {
         // Get the prefix for the given server from the FrameworkDB
         Connection conn = connectionSetup();
         String prefix = null;
@@ -98,4 +98,6 @@ public class FrameworkDB {
 
         return prefix;
     }
+
+    // TODO: Add public method for setting server prefix
 }
