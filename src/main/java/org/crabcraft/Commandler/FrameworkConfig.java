@@ -7,7 +7,7 @@ public class FrameworkConfig {
 
     private static String fileName = "config.properties";
 
-    public static void firstTimeSetup() {
+    static void firstTimeSetup() {
         if (new File(fileName).exists()) {
             System.out.println("FrameworkConfig file exists, skipping first time setup");
         }
