@@ -8,6 +8,7 @@ bin/
 # Stupid IntelliJ stuff
 .idea
 *.iml
+out/
 
 # Stupid VSCode stuff
 .vscode
