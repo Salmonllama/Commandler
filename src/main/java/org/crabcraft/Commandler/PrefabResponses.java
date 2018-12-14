@@ -9,12 +9,10 @@ class PrefabResponses {
 
     static EmbedBuilder noPermissions(MessageCreateEvent event, String permission) {
 
-        EmbedBuilder embed = new EmbedBuilder()
+        return new EmbedBuilder()
             .setColor(Color.RED)
             .setAuthor(event.getApi().getYourself())
             .addField("Missing Permissions:", permission);
-
-        return embed;
     }
 
     /*
