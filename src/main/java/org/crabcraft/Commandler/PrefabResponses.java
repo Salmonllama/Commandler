@@ -16,4 +16,11 @@ class PrefabResponses {
 
         return embed;
     }
+
+    /*
+     * TODO: Add bundled prefab responses for:
+     *  - Improper command usage, includes proper command usage + description
+     *  - Errors, or warnings, with custom fields for displaying an error message
+     */
+
 }
