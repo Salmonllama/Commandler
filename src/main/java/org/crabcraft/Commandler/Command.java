@@ -13,7 +13,7 @@ import java.util.concurrent.Future;
 
 public abstract class Command implements MessageCreateListener {
 
-    public abstract void onCommand(MessageCreateEvent event, String[] args);
+    public abstract void onCommand(MessageCreateEvent mcEvent, String[] args);
     public abstract List<String> Aliases();
     public abstract String Description();
     public abstract String Name();
@@ -27,12 +27,11 @@ public abstract class Command implements MessageCreateListener {
             // Ignore bot users
             return;
         }
-        // TODO: make sure it tracks the prefix length too, in cutPrefix() as well.
-        if (!event.getMessageContent().split("")[0].equals(grabPrefix(event.getServer().get().getIdAsString()))) {
-            // Ignore prefixes that aren't in the config
+        if (!event.getMessageContent().substring(0, grabPrefix(event.getServer().get().getIdAsString()).length()).equals(grabPrefix(event.getServer().get().getIdAsString()))) {
+            // Ignore prefixes that aren't in the config or the database
             return;
         }
-        if (!isCommand(event.getMessageContent())) {
+        if (!isCommand(event)) {
             // Ignore any message that doesn't start with a registered command or its alias
             return;
         }
@@ -40,22 +39,22 @@ public abstract class Command implements MessageCreateListener {
             return;
         }
 
-        onCommand(event, getCommandArgs(event.getMessageContent()));
+        onCommand(event, getCommandArgs(event));
     }
 
-    private static String[] cutPrefix(String message) {
+    private static String[] cutPrefix(MessageCreateEvent event) {
         // Remove the prefix from the command
-        return message.substring(1).split(" ");
+        return event.getMessageContent().toLowerCase().substring(grabPrefix(event.getServer().get().getIdAsString()).length()).split(" ");
     }
 
-    private boolean isCommand(String string) {
+    private boolean isCommand(MessageCreateEvent event) {
         // Check if the string is a command or a command alias
-        return Aliases().contains(Command.cutPrefix(string.toLowerCase())[0]);
+        return Aliases().contains(Command.cutPrefix(event)[0]);
     }
 
-    private String[] getCommandArgs(String message) {
+    private String[] getCommandArgs(MessageCreateEvent event) {
         // Get the arguments; remove the command itself
-        return Arrays.copyOfRange(cutPrefix(message), 1, cutPrefix(message).length);
+        return Arrays.copyOfRange(cutPrefix(event), 1, cutPrefix(event).length);
     }
 
     private boolean hasPermission(MessageCreateEvent event, User author) {
@@ -73,7 +72,7 @@ public abstract class Command implements MessageCreateListener {
             }
         }
         
-        if (!event.getServer().get().getPermissions(author).getAllowedPermission().toString().contains(this.Permission())) {
+        if (!event.getServer().get().getPermissions(event.getMessageAuthor().asUser().orElseThrow(AssertionError::new)).getAllowedPermission().toString().contains(this.Permission())) {
             // If the user doesn't have reqperm, don't let them use the command!
             event.getChannel().sendMessage(PrefabResponses.noPermissions(event, this.Permission()));
             return false;
@@ -82,7 +81,7 @@ public abstract class Command implements MessageCreateListener {
         return true;
     }
 
-    private String grabPrefix(String serverId) {
+    private static String grabPrefix(String serverId) {
         if (FrameworkDB.getServerPrefix(serverId) == null) {
             return FrameworkConfig.getDefaultPrefix();
         }
