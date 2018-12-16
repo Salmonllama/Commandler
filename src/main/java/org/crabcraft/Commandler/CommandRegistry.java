@@ -19,7 +19,7 @@ public class CommandRegistry {
 
     /**
     * Registers the command, adding it to the global registry.
-    * *Returns the command, making it easy to add a messageCreateListener through Javacord and register the command.
+    * Returns the command, making it easy to add a messageCreateListener through Javacord and register the command.
     *
     * @param command The command to be registered
     * @return The registered command
