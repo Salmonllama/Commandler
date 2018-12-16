@@ -1,16 +1,20 @@
 package org.crabcraft.Commandler;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.util.TreeMap;
 
-    /*
-    * The base registry.
-    * Used to register commands and track registered commands.
-    */
+/*
+* The base registry.
+* Used to register commands and track registered commands.
+*/
 public class CommandRegistry {
-    private static TreeMap<String, Command> commands;
+    private static TreeMap<String, Command> commandsMap;
+    private static List<Command> commandsList;
 
     public CommandRegistry() {
-        commands = new TreeMap<>();
+        commandsMap = new TreeMap<>();
+        commandsList = new ArrayList<Command>();
 
         // Run Config and DB setups
         FrameworkConfig.firstTimeSetup();
@@ -25,7 +29,8 @@ public class CommandRegistry {
     * @return The registered command
     */
     public Command registerCommand(Command command) {
-        commands.put(command.Aliases().get(0), command);
+        commandsMap.put(command.Aliases().get(0), command);
+        commandsList.add(command);
         return command;
     }
 
@@ -34,7 +39,11 @@ public class CommandRegistry {
      * 
      * @return The TreeMap of commands
      */
-    public TreeMap<String, Command> getCommands() {
-        return commands;
+    public TreeMap<String, Command> getCommandsMap() {
+        return commandsMap;
+    }
+
+    public List<Command> getCommandsList() {
+        return commandsList;
     }
 }
