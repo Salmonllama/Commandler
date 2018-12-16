@@ -13,7 +13,7 @@ import java.util.concurrent.Future;
 
 public abstract class Command implements MessageCreateListener {
 
-    public abstract void onCommand(MessageCreateEvent mcEvent, String[] args);
+    public abstract void onCommand(MessageCreateEvent event, String[] args);
     public abstract List<String> Aliases();
     public abstract String Description();
     public abstract String Name();
