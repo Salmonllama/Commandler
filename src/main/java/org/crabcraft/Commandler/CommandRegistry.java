@@ -35,7 +35,7 @@ public class CommandRegistry {
     }
 
     /**
-     * Gets the list of registered commands.
+     * Gets the TreeMap of registered commands.
      * 
      * @return The TreeMap of commands
      */
@@ -43,6 +43,11 @@ public class CommandRegistry {
         return commandsMap;
     }
 
+    /**
+     * Gets the List of registered commands.
+     * 
+     * @return The List<Command> of commands.
+     */
     public List<Command> getCommandsList() {
         return commandsList;
     }
