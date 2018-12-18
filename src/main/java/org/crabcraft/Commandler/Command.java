@@ -28,6 +28,7 @@ public abstract class Command implements MessageCreateListener {
             return;
         }
         if (!event.getMessageContent().substring(0, grabPrefix(event.getServer().get().getIdAsString()).length()).equals(grabPrefix(event.getServer().get().getIdAsString()))) {
+            // TODO: Move to separate method 'startsWithTrigger()' to detect prefixes and bot mentions.
             // Ignore prefixes that aren't in the config or the database
             return;
         }
@@ -78,6 +79,7 @@ public abstract class Command implements MessageCreateListener {
             return false;
         }
 
+        // Fallback to allowing command usage if no cases are matched
         return true;
     }
 
