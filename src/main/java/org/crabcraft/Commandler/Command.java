@@ -36,7 +36,7 @@ public abstract class Command implements MessageCreateListener {
             // Ignore any message that doesn't start with a registered command or its alias
             return;
         }
-        if (!hasPermission(event, event.getMessageAuthor().asUser().orElseThrow(AssertionError::new))) {
+        if (!hasPermission(event)) {
             return;
         }
 
@@ -58,29 +58,27 @@ public abstract class Command implements MessageCreateListener {
         return Arrays.copyOfRange(cutPrefix(event), 1, cutPrefix(event).length);
     }
 
-    private boolean hasPermission(MessageCreateEvent event, User author) {
-        // Check if the user has permission to use that command
+    private boolean hasPermission(MessageCreateEvent event) {
+        // Check if the user has permission to use the command.
+        // Checks permission based on this.Permission()
         if (this.Permission().equals("none")) {
             // Allow everyone to use a command with no reqperms
             return true;
         }
 
-        if (this.Permission().equals("BOT_OWNER")) {
+        if (this.Permission().equals("BOT_OWNER") && event.getMessageAuthor().isBotOwner()) {
             // Only allow the bot owner to use command with BOT_OWNER reqperms
-            if (!event.getMessageAuthor().isBotOwner()) {
-                event.getChannel().sendMessage(PrefabResponses.noPermissions(event, this.Permission()));
-                return false;
-            }
+            return true;
         }
         
-        if (!event.getServer().get().getPermissions(event.getMessageAuthor().asUser().orElseThrow(AssertionError::new)).getAllowedPermission().toString().contains(this.Permission())) {
-            // If the user doesn't have reqperm, don't let them use the command!
-            event.getChannel().sendMessage(PrefabResponses.noPermissions(event, this.Permission()));
-            return false;
+        if (event.getServer().orElseThrow(AssertionError::new).getPermissions(event.getMessageAuthor().asUser().orElseThrow(AssertionError::new)).getAllowedPermission().toString().contains(this.Permission())) {
+            // If this.Permission() matches one of the user's Discord permissions, allow command usage
+            return true;
         }
 
-        // Fallback to allowing command usage if no cases are matched
-        return true;
+        // Fallback to disallowing command usage if no cases are matched
+        event.getChannel().sendMessage(PrefabResponses.noPermissions(event, this.Permission()));
+        return false;
     }
 
     private static String grabPrefix(String serverId) {
