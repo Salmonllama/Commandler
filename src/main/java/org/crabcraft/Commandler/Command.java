@@ -49,6 +49,19 @@ public abstract class Command implements MessageCreateListener {
         return event.getMessageContent().toLowerCase().substring(grabPrefix(event.getServer().get().getIdAsString()).length()).split(" ");
     }
 
+    private static boolean isValidSource(MessageCreateEvent event) {
+        // Check if the validity of the source
+        if (event.getMessageAuthor().asUser().orElseThrow(AssertionError::new).isBot()) {
+            // Ignore bot users
+            return false;
+        }
+
+        // Fallback to allowing all umatched sources
+        return true;
+
+        // TODO: framework-managed blacklist for users and servers. If user -> ignore. If server -> leave.
+    }
+
     private static boolean startsWithTrigger(MessageCreateEvent event) {
         //! Need to accomodate for cutPrefix(). Remove the bot mention from the command args instead of the prefix. Maybe a separate mention module?
         if (event.getMessageContent().substring(0, grabPrefix(event.getServer().get().getIdAsString()).length()).equals(grabPrefix(event.getServer().get().getIdAsString()))) {
