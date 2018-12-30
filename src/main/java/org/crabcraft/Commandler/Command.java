@@ -24,6 +24,7 @@ public abstract class Command implements MessageCreateListener {
     @Override
     public void onMessageCreate(MessageCreateEvent event) {
         if (event.getMessageAuthor().asUser().map(User::isBot).orElse(true)) {
+            // TODO: Move to isValidSource() to weed out bot users, and blacklisted servers/users (soon tm).
             // Ignore bot users
             return;
         }
