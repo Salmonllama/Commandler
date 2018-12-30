@@ -100,4 +100,20 @@ public class FrameworkDB {
     }
 
     // TODO: Add public method for setting server prefix
+    public static void setServerPrefix(String serverId, String newPrefix) {
+    	Connection conn = connectionSetup();
+    	
+    	try {
+    		String sql = "UPDATE serverConf SET prefix = ? WHERE serverId = ?";
+    		
+    		PreparedStatement stmt = conn.prepareStatement(sql);
+    		stmt.setString(1, newPrefix);
+    		stmt.setString(2, serverId);
+    		stmt.executeUpdate();
+    		stmt.close();
+    	}
+    	catch (SQLException e) {
+    		System.out.println(e.getMessage());
+    	}
+    }
 }
