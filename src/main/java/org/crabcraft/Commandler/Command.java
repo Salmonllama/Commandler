@@ -56,14 +56,14 @@ public abstract class Command implements MessageCreateListener {
             return false;
         }
 
-        // Fallback to allowing all umatched sources
+        // Fallback to allowing all unmatched sources
         return true;
 
         // TODO: framework-managed blacklist for users and servers. If user -> ignore. If server -> leave.
     }
 
     private static boolean startsWithTrigger(MessageCreateEvent event) {
-        //! Need to accomodate for cutPrefix(). Remove the bot mention from the command args instead of the prefix. Maybe a separate mention module?
+        //! Need to accommodate for cutPrefix(). Remove the bot mention from the command args instead of the prefix. Maybe a separate mention module?
         if (event.getMessageContent().substring(0, grabPrefix(event.getServer().get().getIdAsString()).length()).equals(grabPrefix(event.getServer().get().getIdAsString()))) {
             // Starting with the prefix is a valid trigger. Accounts for prefix length.
             return true;
