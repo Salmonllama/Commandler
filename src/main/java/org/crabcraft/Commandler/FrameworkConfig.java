@@ -2,6 +2,7 @@ package org.crabcraft.Commandler;
 
 import java.io.*;
 import java.util.Properties;
+import java.util.concurrent.Future;
 
 public class FrameworkConfig {
 
@@ -53,13 +54,17 @@ public class FrameworkConfig {
         }
 
         return properties;
-     }
+    }
 
     public static String getToken() {
-            return loadConfigFile().getProperty("token");
-     }
+        return loadConfigFile().getProperty("token");
+    }
 
     public static String getDefaultPrefix() {
         return loadConfigFile().getProperty("default-prefix");
+    }
+    
+    public static void setDefaultPrefix(String newPrefix) {
+    	loadConfigFile().setProperty("default-prefix", newPrefix);
     }
 }
