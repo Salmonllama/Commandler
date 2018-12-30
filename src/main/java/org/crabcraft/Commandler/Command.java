@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.concurrent.Future;
 
 public abstract class Command implements MessageCreateListener {
+	// TODO: class MessageCreateEvent object to simplify methods and responses
 
     public abstract void onCommand(MessageCreateEvent event, String[] args);
     public abstract List<String> Aliases();
