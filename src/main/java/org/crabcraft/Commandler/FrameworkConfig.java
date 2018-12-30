@@ -2,7 +2,6 @@ package org.crabcraft.Commandler;
 
 import java.io.*;
 import java.util.Properties;
-import java.util.concurrent.Future;
 
 public class FrameworkConfig {
 
