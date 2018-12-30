@@ -49,6 +49,22 @@ public abstract class Command implements MessageCreateListener {
         return event.getMessageContent().toLowerCase().substring(grabPrefix(event.getServer().get().getIdAsString()).length()).split(" ");
     }
 
+    private static boolean startsWithTrigger(MessageCreateEvent event) {
+        //! Need to accomodate for cutPrefix(). Remove the bot mention from the command args instead of the prefix. Maybe a separate mention module?
+        if (event.getMessageContent().substring(0, grabPrefix(event.getServer().get().getIdAsString()).length()).equals(grabPrefix(event.getServer().get().getIdAsString()))) {
+            // Starting with the prefix is a valid trigger. Accounts for prefix length.
+            return true;
+        }
+
+        if (event.getMessage().getMentionedUsers().contains(event.getApi().getYourself())) {
+            // Containing a bot mention is a sufficient trigger; anywhere in the command.
+            return true;
+        }
+
+        // Fallback to ignoring messages if no cases are matched.
+        return false;
+    }
+
     private boolean isCommand(MessageCreateEvent event) {
         // Check if the string is a command or a command alias
         return Aliases().contains(Command.cutPrefix(event)[0]);
