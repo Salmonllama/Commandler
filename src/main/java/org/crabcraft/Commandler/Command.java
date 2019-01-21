@@ -2,7 +2,6 @@ package org.crabcraft.Commandler;
 
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
-import org.javacord.api.entity.user.User;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 
@@ -13,6 +12,7 @@ import java.util.concurrent.Future;
 
 public abstract class Command implements MessageCreateListener {
 	// TODO: class MessageCreateEvent object to simplify methods and responses
+	private MessageCreateEvent event;
 
     public abstract void onCommand(MessageCreateEvent event, String[] args);
     public abstract List<String> Aliases();
@@ -24,35 +24,36 @@ public abstract class Command implements MessageCreateListener {
 
     @Override
     public void onMessageCreate(MessageCreateEvent event) {
-        if (event.getMessageAuthor().asUser().map(User::isBot).orElse(true)) {
+    	this.event = event;
+        if (!isValidSource()) {
             // TODO: Move to isValidSource() to weed out bot users, and blacklisted servers/users (soon tm).
             // Ignore bot users
             return;
         }
-        if (!event.getMessageContent().substring(0, grabPrefix(event.getServer().get().getIdAsString()).length()).equals(grabPrefix(event.getServer().get().getIdAsString()))) {
+        if (!this.event.getMessageContent().substring(0, grabPrefix(this.event.getServer().get().getIdAsString()).length()).equals(grabPrefix(this.event.getServer().get().getIdAsString()))) {
             // TODO: Move to separate method 'startsWithTrigger()' to detect prefixes and bot mentions.
             // Ignore prefixes that aren't in the config or the database
             return;
         }
-        if (!isCommand(event)) {
+        if (!isCommand()) {
             // Ignore any message that doesn't start with a registered command or its alias
             return;
         }
-        if (!hasPermission(event)) {
+        if (!hasPermission()) {
             return;
         }
 
-        onCommand(event, getCommandArgs(event));
+        onCommand(this.event, getCommandArgs());
     }
 
-    private static String[] cutPrefix(MessageCreateEvent event) {
+    private String[] cutPrefix() {
         // Remove the prefix from the command
-        return event.getMessageContent().toLowerCase().substring(grabPrefix(event.getServer().get().getIdAsString()).length()).split(" ");
+        return this.event.getMessageContent().toLowerCase().substring(grabPrefix(this.event.getServer().get().getIdAsString()).length()).split(" ");
     }
 
-    private static boolean isValidSource(MessageCreateEvent event) {
+    private boolean isValidSource() {
         // Check if the validity of the source
-        if (event.getMessageAuthor().asUser().orElseThrow(AssertionError::new).isBot()) {
+        if (this.event.getMessageAuthor().asUser().orElseThrow(AssertionError::new).isBot()) {
             // Ignore bot users
             return false;
         }
@@ -63,14 +64,14 @@ public abstract class Command implements MessageCreateListener {
         // TODO: framework-managed blacklist for users and servers. If user -> ignore. If server -> leave.
     }
 
-    private static boolean startsWithTrigger(MessageCreateEvent event) {
+    private boolean startsWithTrigger() {
         //! Need to accommodate for cutPrefix(). Remove the bot mention from the command args instead of the prefix. Maybe a separate mention module?
-        if (event.getMessageContent().substring(0, grabPrefix(event.getServer().get().getIdAsString()).length()).equals(grabPrefix(event.getServer().get().getIdAsString()))) {
+        if (this.event.getMessageContent().substring(0, grabPrefix(this.event.getServer().get().getIdAsString()).length()).equals(grabPrefix(this.event.getServer().get().getIdAsString()))) {
             // Starting with the prefix is a valid trigger. Accounts for prefix length.
             return true;
         }
 
-        if (event.getMessage().getMentionedUsers().contains(event.getApi().getYourself())) {
+        if (this.event.getMessage().getMentionedUsers().contains(this.event.getApi().getYourself())) {
             // Containing a bot mention is a sufficient trigger; anywhere in the command.
             return true;
         }
@@ -79,17 +80,17 @@ public abstract class Command implements MessageCreateListener {
         return false;
     }
 
-    private boolean isCommand(MessageCreateEvent event) {
+    private boolean isCommand() {
         // Check if the string is a command or a command alias
-        return Aliases().contains(Command.cutPrefix(event)[0]);
+        return Aliases().contains(this.cutPrefix()[0]);
     }
 
-    private String[] getCommandArgs(MessageCreateEvent event) {
+    private String[] getCommandArgs() {
         // Get the arguments; remove the command itself
-        return Arrays.copyOfRange(cutPrefix(event), 1, cutPrefix(event).length);
+        return Arrays.copyOfRange(this.cutPrefix(), 1, this.cutPrefix().length);
     }
 
-    private boolean hasPermission(MessageCreateEvent event) {
+    private boolean hasPermission() {
         // Check if the user has permission to use the command.
         // Checks permission based on this.Permission()
         if (this.Permission().equals("none")) {
@@ -97,18 +98,18 @@ public abstract class Command implements MessageCreateListener {
             return true;
         }
 
-        if (this.Permission().equals("BOT_OWNER") && event.getMessageAuthor().isBotOwner()) {
+        if (this.Permission().equals("BOT_OWNER") && this.event.getMessageAuthor().isBotOwner()) {
             // Only allow the bot owner to use command with BOT_OWNER reqperms
             return true;
         }
         
-        if (event.getServer().orElseThrow(AssertionError::new).getPermissions(event.getMessageAuthor().asUser().orElseThrow(AssertionError::new)).getAllowedPermission().toString().contains(this.Permission())) {
+        if (this.event.getServer().orElseThrow(AssertionError::new).getPermissions(this.event.getMessageAuthor().asUser().orElseThrow(AssertionError::new)).getAllowedPermission().toString().contains(this.Permission())) {
             // If this.Permission() matches one of the user's Discord permissions, allow command usage
             return true;
         }
 
         // Fallback to disallowing command usage if no cases are matched
-        event.getChannel().sendMessage(PrefabResponses.noPermissions(event, this.Permission()));
+        this.event.getChannel().sendMessage(PrefabResponses.noPermissions(this.event, this.Permission()));
         return false;
     }
 
@@ -121,19 +122,19 @@ public abstract class Command implements MessageCreateListener {
         }
     }
 
-    protected Future<Message> sendResponse(MessageCreateEvent event, String message) {
-        return event.getChannel().sendMessage(message);
+    protected Future<Message> sendResponse(String message) {
+        return this.event.getChannel().sendMessage(message);
     }
 
-    protected Future<Message> sendResponse(MessageCreateEvent event, EmbedBuilder embed) {
-        return event.getChannel().sendMessage(embed);
+    protected Future<Message> sendResponse(EmbedBuilder embed) {
+        return this.event.getChannel().sendMessage(embed);
     }
 
-    protected Future<Message> sendResponse(MessageCreateEvent event, File file) {
-        return event.getChannel().sendMessage(file);
+    protected Future<Message> sendResponse(File file) {
+        return this.event.getChannel().sendMessage(file);
     }
 
-    protected Future<Message> sendResponse(MessageCreateEvent event, File file, String message) {
-        return event.getChannel().sendMessage(message, file);
+    protected Future<Message> sendResponse(File file, String message) {
+        return this.event.getChannel().sendMessage(message, file);
     }
 }

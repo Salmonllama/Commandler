@@ -27,17 +27,18 @@ public class DefaultPrefixCommand extends Command {
     public void onCommand(MessageCreateEvent event, String[] args) {
     	if (args.length == 0) {
     		// Get the dprefix
-    		sendResponse(event, defaultPrefixGet());
+    		sendResponse(defaultPrefixGet());
     		return;
     	}
     	else if (args.length == 1) {
     		// Set the dprefix
+    		sendResponse(defaultPrefixSet(args[0].split(":")[1]));
     	}
     }
     
     EmbedBuilder defaultPrefixGet() {
     	return new EmbedBuilder()
-				.setTitle("Current Prefix")
+				.setTitle("Current Default Prefix")
 				.setColor(Color.GREEN)
 				.setDescription(String.format("```%s```", FrameworkConfig.getDefaultPrefix()));
     }
@@ -46,8 +47,8 @@ public class DefaultPrefixCommand extends Command {
     	FrameworkConfig.setDefaultPrefix(newPrefix);
     	
     	return new EmbedBuilder()
-    			.setTitle("Prefix Updated")
+    			.setTitle("Default Prefix Updated")
     			.setColor(Color.GREEN)
-    			.addField("New Prefix:", String.format("```%s```", newPrefix));
+    			.addField("New Default Prefix:", String.format("```%s```", newPrefix));
     }
 }
