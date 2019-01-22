@@ -1,6 +1,6 @@
-package org.crabcraft.Commandler.commands;
+package studio.spiderling.Commandler.commands;
 
-import org.crabcraft.Commandler.Command;
+import studio.spiderling.Commandler.Command;
 import java.util.List;
 import java.util.Arrays;
 import org.javacord.api.event.message.MessageCreateEvent;

@@ -1,11 +1,11 @@
-package org.crabcraft.Commandler.commands;
+package studio.spiderling.Commandler.commands;
 
 import java.awt.Color;
 import java.util.Arrays;
 import java.util.List;
 
-import org.crabcraft.Commandler.Command;
-import org.crabcraft.Commandler.FrameworkConfig;
+import studio.spiderling.Commandler.Command;
+import studio.spiderling.Commandler.FrameworkConfig;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 

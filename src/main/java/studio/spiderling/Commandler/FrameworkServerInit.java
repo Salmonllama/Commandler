@@ -1,4 +1,4 @@
-package org.crabcraft.Commandler;
+package studio.spiderling.Commandler;
 
 import org.javacord.api.event.server.ServerJoinEvent;
 import org.javacord.api.listener.server.ServerJoinListener;

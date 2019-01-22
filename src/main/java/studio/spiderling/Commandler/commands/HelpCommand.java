@@ -1,9 +1,9 @@
-package org.crabcraft.Commandler.commands;
+package studio.spiderling.Commandler.commands;
 
 import java.util.List;
 import java.util.Arrays;
 
-import org.crabcraft.Commandler.Command;
+import studio.spiderling.Commandler.Command;
 import org.javacord.api.event.message.MessageCreateEvent;
 
 public class HelpCommand extends Command {

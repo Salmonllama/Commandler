@@ -1,10 +1,10 @@
-package org.crabcraft.Commandler;
+package studio.spiderling.Commandler;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-import org.crabcraft.Commandler.commands.DefaultPrefixCommand;
+import studio.spiderling.Commandler.commands.DefaultPrefixCommand;
 import org.javacord.api.DiscordApi;
 
 /*

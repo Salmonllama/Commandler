@@ -1,4 +1,4 @@
-package org.crabcraft.Commandler;
+package studio.spiderling.Commandler;
 
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
