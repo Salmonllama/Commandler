@@ -48,7 +48,7 @@ public abstract class Command implements MessageCreateListener {
 
     private String[] cutPrefix() {
         // Remove the prefix from the command
-        return this.event.getMessageContent().toLowerCase().substring(grabPrefix(this.event.getServer().get().getIdAsString()).length()).split(" ");
+        return this.event.getMessageContent().substring(grabPrefix(this.event.getServer().get().getIdAsString()).length()).split(" ");
     }
 
     private boolean isValidSource() {
@@ -57,9 +57,10 @@ public abstract class Command implements MessageCreateListener {
             // Ignore bot users
             return false;
         }
-
-        // Fallback to allowing all unmatched sources
-        return true;
+        else {
+            // Fallback to allowing all unmatched sources
+            return true;
+        }
 
         // TODO: framework-managed blacklist for users and servers. If user -> ignore. If server -> leave.
     }
@@ -82,7 +83,7 @@ public abstract class Command implements MessageCreateListener {
 
     private boolean isCommand() {
         // Check if the string is a command or a command alias
-        return Aliases().contains(this.cutPrefix()[0]);
+        return Aliases().contains(this.cutPrefix()[0].toLowerCase());
     }
 
     private String[] getCommandArgs() {
