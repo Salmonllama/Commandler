@@ -9,7 +9,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.crabcraft:commandler:VERSION' // Currently v1.1.0
+    implementation 'org.crabcraft:commandler:VERSION' // Currently v1.2.2
 }
 ```
 
