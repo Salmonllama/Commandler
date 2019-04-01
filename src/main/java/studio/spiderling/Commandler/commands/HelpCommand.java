@@ -16,7 +16,7 @@ public class HelpCommand extends Command {
     @Override
     public String Usage() { return "help [command]"; }
     @Override
-    public String Permission() { return "none"; }
+    public List<String> Permissions() { return Arrays.asList("none"); }
     @Override
     public String Category() { return "Framework"; }
     

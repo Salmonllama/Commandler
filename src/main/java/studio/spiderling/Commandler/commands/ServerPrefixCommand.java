@@ -15,7 +15,7 @@ public class ServerPrefixCommand extends Command {
     @Override
     public String Usage() { return "example <arguments>"; }
     @Override
-    public String Permission() { return "none"; }
+    public List<String> Permissions() { return Arrays.asList("none"); }
     @Override
     public String Category() { return "Example Commands"; }
 

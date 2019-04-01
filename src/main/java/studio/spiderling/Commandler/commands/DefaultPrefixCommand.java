@@ -19,7 +19,7 @@ public class DefaultPrefixCommand extends Command {
     @Override
     public String Usage() { return "defaultprefix [set:newprefix]"; }
     @Override
-    public String Permission() { return "BOT_OWNER"; }
+    public List<String> Permissions() { return Arrays.asList("BOT_OWNER"); }
     @Override
     public String Category() { return "Framework"; }
     
