@@ -4,14 +4,21 @@ import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 
 import java.awt.*;
+import java.util.List;
 
 class PrefabResponses {
 
-    static EmbedBuilder noPermissions(MessageCreateEvent event, String permission) {
+    static EmbedBuilder noPermissions(MessageCreateEvent event, List<String> permissions) {
+        StringBuilder builder = new StringBuilder()
+                .append("```md\n");
+
+        permissions.forEach(permission -> builder.append(String.format("- %s", permission)).append("\n"));
+        builder.append("```");
+
         return new EmbedBuilder()
             .setColor(Color.RED)
             .setAuthor(event.getApi().getYourself())
-            .addField("Missing Permissions:", permission);
+            .addField("Required Permissions:", builder.toString());
     }
 
     static EmbedBuilder improperUsage(MessageCreateEvent event, String usage) {
