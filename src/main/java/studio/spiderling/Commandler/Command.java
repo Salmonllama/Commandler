@@ -6,6 +6,7 @@ import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Future;
@@ -20,7 +21,7 @@ public abstract class Command implements MessageCreateListener {
     public abstract String Name();
     public abstract String Usage();
     public abstract String Category();
-    public abstract String Permission();
+    public abstract List<String> Permissions();
 
     @Override
     public void onMessageCreate(MessageCreateEvent event) {
@@ -43,7 +44,7 @@ public abstract class Command implements MessageCreateListener {
             return;
         }
 
-        onCommand(this.event, getCommandArgs());
+        this.event.getApi().getThreadPool().getExecutorService().submit(() -> onCommand(this.event, getCommandArgs()));
     }
 
     private String[] cutPrefix() {
