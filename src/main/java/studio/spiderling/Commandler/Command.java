@@ -93,24 +93,37 @@ public abstract class Command implements MessageCreateListener {
 
     private boolean hasPermission() {
         // Check if the user has permission to use the command.
-        // Checks permission based on this.Permission()
-        if (this.Permission().equals("none")) {
-            // Allow everyone to use a command with no reqperms
+        // Checks permission based on this.Permissions()
+
+        List<String> authorPermissions = new ArrayList<>();
+
+        this.event.getServer().ifPresent(server -> {
+            this.event.getMessageAuthor().asUser().ifPresent(user -> {
+                server.getAllowedPermissions(user).forEach(perm -> {
+                    authorPermissions.add(perm.name());
+                });
+            });
+        });
+
+        if (this.Permissions().contains("none")) {
+            // If none even exists, allow command usage
+            // none will override any other permission entered
             return true;
         }
 
-        if (this.Permission().equals("BOT_OWNER") && this.event.getMessageAuthor().isBotOwner()) {
-            // Only allow the bot owner to use command with BOT_OWNER reqperms
+        if (this.Permissions().contains("BOT_OWNER") && this.event.getMessageAuthor().isBotOwner()) {
+            // If BOT_OWNER even exists, restrict to bot owner
             return true;
         }
-        
-        if (this.event.getServer().orElseThrow(AssertionError::new).getPermissions(this.event.getMessageAuthor().asUser().orElseThrow(AssertionError::new)).getAllowedPermission().toString().contains(this.Permission())) {
-            // If this.Permission() matches one of the user's Discord permissions, allow command usage
+
+        if (authorPermissions.containsAll(this.Permissions())) {
+            // If the message author has all the reqperms, allow usage.
+            // All permissions i
             return true;
         }
 
         // Fallback to disallowing command usage if no cases are matched
-        this.event.getChannel().sendMessage(PrefabResponses.noPermissions(this.event, this.Permission()));
+        this.event.getChannel().sendMessage(PrefabResponses.noPermissions(this.event, this.Permissions()));
         return false;
     }
 
