@@ -54,7 +54,11 @@ public abstract class Command implements MessageCreateListener {
 
     private boolean isValidSource() {
         // Check if the validity of the source
-        if (this.event.getMessageAuthor().asUser().orElseThrow(AssertionError::new).isBot()) {
+        if (this.event.getMessageAuthor().isWebhook()) {
+            // Ignore any messages from webhooks
+            return false;
+        }
+        else if (this.event.getMessageAuthor().asUser().orElseThrow(AssertionError::new).isBot()) {
             // Ignore bot users
             return false;
         }
