@@ -64,4 +64,19 @@ public class CommandRegistry {
     	// TODO: HelpCommand, ServerPrefix commands, DefaultPrefix commands.
     	api.addMessageCreateListener(this.registerCommand(new DefaultPrefixCommand()));
     }
+
+    /**
+     * Gets the prefix of the server, for use mostly in help or utility commands.
+     * 
+     * @param serverId The serverId of the server of origin.
+     * @return The prefix of the server, or the default prefix if none set.
+     */
+    public String getUsedPrefix(String serverId) {
+        if (FrameworkDB.getServerPrefix(serverId) == null) {
+            return FrameworkConfig.getDefaultPrefix();
+        }
+        else {
+            return FrameworkDB.getServerPrefix(serverId);
+        }
+    }
 }
