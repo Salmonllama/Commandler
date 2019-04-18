@@ -1,9 +1,10 @@
 plugins {
     id 'java'
+    id 'pl.allegro.tech.build.axion-release' version '1.10.1'
 }
 
 group 'studio.spiderling'
-version 'v1.2.3'
+project.version = scmVersion.version
 
 sourceCompatibility = 1.8
 
