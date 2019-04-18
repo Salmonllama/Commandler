@@ -6,7 +6,7 @@ import org.javacord.api.event.message.MessageCreateEvent;
 import java.awt.*;
 import java.util.List;
 
-class PrefabResponses {
+public class PrefabResponses {
 
     static EmbedBuilder noPermissions(MessageCreateEvent event, List<String> permissions) {
         StringBuilder builder = new StringBuilder()
@@ -21,7 +21,7 @@ class PrefabResponses {
             .addField("Required Permissions:", builder.toString());
     }
 
-    static EmbedBuilder improperUsage(MessageCreateEvent event, String usage) {
+    public static EmbedBuilder improperUsage(MessageCreateEvent event, String usage) {
         // ?Would the command description would be viable in this embed.
         return new EmbedBuilder()
             .setColor(Color.YELLOW)
