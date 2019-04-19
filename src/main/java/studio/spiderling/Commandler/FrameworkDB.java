@@ -81,21 +81,18 @@ public class FrameworkDB {
 
     public static String getServerPrefix(String serverId) {
         // Get the prefix for the given server from the FrameworkDB
-        Connection conn = connectionSetup();
+
         String prefix = null;
 
         try (
-            Statement stmt = conn.createStatement();
-            ResultSet results = stmt.executeQuery("SELECT prefix FROM serverconf WHERE serverId = " + serverId);
+                Connection conn = connectionSetup();
+                Statement stmt = conn.createStatement();
+                ResultSet results = stmt.executeQuery("SELECT prefix FROM serverconf WHERE serverId = " + serverId)
         ) {
             prefix = results.getString("prefix");
-
         }
         catch(SQLException e) {
             System.out.println(e.getMessage());
-        }
-        finally {
-            try { conn.close(); } catch(SQLException e) { System.out.println(e.getMessage()); }
         }
 
         return prefix;
