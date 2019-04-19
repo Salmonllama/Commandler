@@ -56,13 +56,14 @@ public class CommandRegistry {
     }
     
     /**
-     * Registers the pre-built utility commands that come with the framework. Optional step.
+     * Optional step. Adds the pre-built commands and listeners. Required for server-specific prefixes
      * 
      * @param api The global DiscordApi instance
      */
-    public void registerFrameworkCommands(DiscordApi api) {
+    public void addCommandlerWorkloads(DiscordApi api) {
     	// TODO: HelpCommand, ServerPrefix commands, DefaultPrefix commands.
-    	api.addMessageCreateListener(this.registerCommand(new DefaultPrefixCommand()));
+        api.addMessageCreateListener(this.registerCommand(new DefaultPrefixCommand())); //! Remove. Default prefix only editable through config.
+        api.addServerJoinListener(new FrameworkServerInit());
     }
 
     /**
