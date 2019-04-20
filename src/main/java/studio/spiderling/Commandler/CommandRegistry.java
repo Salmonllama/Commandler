@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-import studio.spiderling.Commandler.commands.DefaultPrefixCommand;
 import org.javacord.api.DiscordApi;
 
 /*
@@ -61,8 +60,7 @@ public class CommandRegistry {
      * @param api The global DiscordApi instance
      */
     public void addCommandlerWorkloads(DiscordApi api) {
-    	// TODO: HelpCommand, ServerPrefix commands, DefaultPrefix commands.
-        api.addMessageCreateListener(this.registerCommand(new DefaultPrefixCommand())); //! Remove. Default prefix only editable through config.
+    	// TODO: Add Framework Commands
         api.addServerJoinListener(new FrameworkServerInit());
     }
 
