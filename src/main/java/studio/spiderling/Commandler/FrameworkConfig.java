@@ -62,8 +62,4 @@ public class FrameworkConfig {
     public static String getDefaultPrefix() {
         return loadConfigFile().getProperty("default-prefix");
     }
-    
-    public static void setDefaultPrefix(String newPrefix) {
-    	loadConfigFile().setProperty("default-prefix", newPrefix);
-    }
 }
