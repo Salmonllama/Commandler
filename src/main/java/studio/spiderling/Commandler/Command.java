@@ -49,16 +49,16 @@ public abstract class Command implements MessageCreateListener {
 
     private String[] cutPrefix() {
         // Remove the prefix from the command
-        return this.event.getMessageContent().substring(grabPrefix(this.event.getServer().get().getIdAsString()).length()).split(" ");
+        return event.getMessageContent().substring(grabPrefix(this.event.getServer().get().getIdAsString()).length()).split(" ");
     }
 
     private boolean isValidSource() {
         // Check if the validity of the source
-        if (this.event.getMessageAuthor().isWebhook()) {
+        if (event.getMessageAuthor().isWebhook()) {
             // Ignore any messages from webhooks
             return false;
         }
-        else if (this.event.getMessageAuthor().asUser().orElseThrow(AssertionError::new).isBot()) {
+        else if (event.getMessageAuthor().asUser().orElseThrow(AssertionError::new).isBot()) {
             // Ignore bot users
             return false;
         }
@@ -72,12 +72,12 @@ public abstract class Command implements MessageCreateListener {
 
     private boolean startsWithTrigger() {
         //! Need to accommodate for cutPrefix(). Remove the bot mention from the command args instead of the prefix. Maybe a separate mention module?
-        if (this.event.getMessageContent().substring(0, grabPrefix(this.event.getServer().get().getIdAsString()).length()).equals(grabPrefix(this.event.getServer().get().getIdAsString()))) {
+        if (event.getMessageContent().substring(0, grabPrefix(event.getServer().get().getIdAsString()).length()).equals(grabPrefix(event.getServer().get().getIdAsString()))) {
             // Starting with the prefix is a valid trigger. Accounts for prefix length.
             return true;
         }
 
-        if (this.event.getMessage().getMentionedUsers().contains(this.event.getApi().getYourself())) {
+        if (event.getMessage().getMentionedUsers().contains(event.getApi().getYourself())) {
             // Containing a bot mention is a sufficient trigger; anywhere in the command.
             return true;
         }
@@ -116,19 +116,19 @@ public abstract class Command implements MessageCreateListener {
             return true;
         }
 
-        if (this.Permissions().contains("BOT_OWNER") && this.event.getMessageAuthor().isBotOwner()) {
+        if (this.Permissions().contains("BOT_OWNER") && event.getMessageAuthor().isBotOwner()) {
             // If BOT_OWNER even exists, restrict to bot owner
             return true;
         }
 
         if (authorPermissions.containsAll(this.Permissions())) {
             // If the message author has all the reqperms, allow usage.
-            // All permissions i
+            // All permissions in reqperms are required for command usage to be allowed.
             return true;
         }
 
         // Fallback to disallowing command usage if no cases are matched
-        this.event.getChannel().sendMessage(PrefabResponses.noPermissions(this.event, this.Permissions()));
+        event.getChannel().sendMessage(PrefabResponses.noPermissions(event, this.Permissions()));
         return false;
     }
 
@@ -142,18 +142,18 @@ public abstract class Command implements MessageCreateListener {
     }
 
     protected Future<Message> sendResponse(String message) {
-        return this.event.getChannel().sendMessage(message);
+        return event.getChannel().sendMessage(message);
     }
 
     protected Future<Message> sendResponse(EmbedBuilder embed) {
-        return this.event.getChannel().sendMessage(embed);
+        return event.getChannel().sendMessage(embed);
     }
 
     protected Future<Message> sendResponse(File file) {
-        return this.event.getChannel().sendMessage(file);
+        return event.getChannel().sendMessage(file);
     }
 
     protected Future<Message> sendResponse(File file, String message) {
-        return this.event.getChannel().sendMessage(message, file);
+        return event.getChannel().sendMessage(message, file);
     }
 }
