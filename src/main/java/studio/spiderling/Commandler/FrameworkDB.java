@@ -5,7 +5,7 @@ import java.sql.*;
 
 public class FrameworkDB {
 
-    static Connection connectionSetup() {
+    private static Connection connectionSetup() {
         // Establish the database connection and return the connection variable
         try {
             Class.forName("org.sqlite.JDBC");
