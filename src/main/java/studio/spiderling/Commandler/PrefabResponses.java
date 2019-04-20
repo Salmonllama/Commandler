@@ -8,7 +8,7 @@ import java.util.List;
 
 public class PrefabResponses {
 
-    static EmbedBuilder noPermissions(MessageCreateEvent event, List<String> permissions) {
+    public static EmbedBuilder noPermissions(MessageCreateEvent event, List<String> permissions) {
         StringBuilder builder = new StringBuilder()
                 .append("```md\n");
 
