@@ -1,4 +1,4 @@
-# Commandler [![Build Status](https://travis-ci.org/SpiderlingStudio/Commandler.svg?branch=master)](https://travis-ci.org/SpiderlingStudio/Commandler)
+# Commandler [![Build Status](https://travis-ci.org/SpiderlingStudio/Commandler.svg?branch=master)](https://travis-ci.org/SpiderlingStudio/Commandler) [(https://img.shields.io/discord/524241446144966659.svg])(https://img.shields.io/discord/524241446144966659.svg)
 ---
 ### Available from Jitpack:
 ```gradle
