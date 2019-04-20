@@ -1,6 +1,7 @@
 package studio.spiderling.Commandler;
 
 import java.io.*;
+import java.util.Optional;
 import java.util.Properties;
 
 public class FrameworkConfig {
@@ -61,5 +62,15 @@ public class FrameworkConfig {
 
     public static String getDefaultPrefix() {
         return loadConfigFile().getProperty("default-prefix");
+    }
+
+    public static Optional<String> getProperty(String property) {
+        if (!loadConfigFile().containsKey(property)) {
+            System.out.println("Config does not contain key: " + property);
+            return Optional.empty();
+        }
+        else {
+            return Optional.of(loadConfigFile().getProperty(property));
+        }
     }
 }
