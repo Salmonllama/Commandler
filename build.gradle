@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'studio.spiderling'
-version 'v1.2.3'
+version '1.3.0'
 
 sourceCompatibility = 1.8
 
