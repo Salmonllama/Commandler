@@ -38,7 +38,7 @@ public class FrameworkDB {
         }
     }
 
-    static void serverFirstTimeSetup(String serverPrefix, String serverId) {
+    public static void serverFirstTimeSetup(String serverPrefix, String serverId) {
         // When a server is joined, this is called to add it to the database table.
         Connection conn = connectionSetup();
 
