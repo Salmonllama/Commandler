@@ -6,6 +6,9 @@ import java.util.TreeMap;
 
 import org.javacord.api.DiscordApi;
 
+import studio.spiderling.Commandler.commands.ForceNewServerCommand;
+import studio.spiderling.Commandler.commands.ServerPrefixCommand;
+
 /*
 * The base registry.
 * Used to register commands and track registered commands.
@@ -60,8 +63,12 @@ public class CommandRegistry {
      * @param api The global DiscordApi instance
      */
     public void addCommandlerWorkloads(DiscordApi api) {
-    	// TODO: Add Framework Commands
+        // Add Commandler-specific listeners
         api.addServerJoinListener(new FrameworkServerInit());
+
+        // Register Commandler's packaged commands
+        api.addMessageCreateListener(this.registerCommand(new ServerPrefixCommand()));
+        api.addMessageCreateListener(this.registerCommand(new ForceNewServerCommand()));
     }
 
     /**
