@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
 public abstract class Command implements MessageCreateListener {
@@ -29,6 +30,10 @@ public abstract class Command implements MessageCreateListener {
         if (!isValidSource()) {
             // TODO: Move to isValidSource() to weed out bot users, and blacklisted servers/users (soon tm).
             // Ignore bot users
+            return;
+        }
+        if (this.event.getMessage().getContent().length() < grabPrefix(this.event.getServer().get().getIdAsString()).length()) {
+            // Ignore messages that are shorter than the prefix length;
             return;
         }
         if (!this.event.getMessageContent().substring(0, grabPrefix(this.event.getServer().get().getIdAsString()).length()).equals(grabPrefix(this.event.getServer().get().getIdAsString()))) {
