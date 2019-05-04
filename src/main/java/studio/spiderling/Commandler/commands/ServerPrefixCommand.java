@@ -1,6 +1,7 @@
 package studio.spiderling.Commandler.commands;
 
 import studio.spiderling.Commandler.Command;
+import studio.spiderling.Commandler.CommandContext;
 import studio.spiderling.Commandler.FrameworkDB;
 import studio.spiderling.Commandler.PrefabResponses;
 
@@ -8,8 +9,6 @@ import java.util.List;
 import java.util.Arrays;
 
 import org.javacord.api.entity.message.embed.EmbedBuilder;
-import org.javacord.api.entity.server.Server;
-import org.javacord.api.event.message.MessageCreateEvent;
 
 public class ServerPrefixCommand extends Command {
     @Override
@@ -26,16 +25,16 @@ public class ServerPrefixCommand extends Command {
     public List<String> Permissions() { return Arrays.asList("MANAGE_SERVER"); }
 
     @Override
-    public void onCommand(MessageCreateEvent event, String[] args) {
-        if (event.isPrivateMessage()) {
+    public void onCommand(CommandContext ctx) {
+        if (ctx.isPrivateMessage()) {
             sendResponse("This command is for managing the *server* prefix. Please use this again in a server.");
             return;
         }
 
-        if (args.length == 0) {
+        if (ctx.getArgs().length == 0) {
             EmbedBuilder embed = new EmbedBuilder();
 
-            event.getServer().ifPresent(server -> {
+            ctx.getServer().ifPresent(server -> {
                 embed.setTitle("Current Prefix")
                     .setDescription("```\n" + FrameworkDB.getServerPrefix(server.getIdAsString()) + "\n```");
             });
@@ -43,21 +42,21 @@ public class ServerPrefixCommand extends Command {
             sendResponse(embed);
             return;
         }
-        else if (args.length == 1) {
+        else if (ctx.getArgs().length == 1) {
             EmbedBuilder embed = new EmbedBuilder();
 
-            event.getServer().ifPresent(server -> {
-                FrameworkDB.setServerPrefix(server.getIdAsString(), args[1]);
+            ctx.getServer().ifPresent(server -> {
+                FrameworkDB.setServerPrefix(server.getIdAsString(), ctx.getArgs()[1]);
 
                 embed.setTitle("Prefix Changed")
-                    .setDescription("**New Prefix:\n" + "```\n" + args[1] + "\n```");
+                    .setDescription("**New Prefix:\n" + "```\n" + ctx.getArgs()[1] + "\n```");
             });
 
             sendResponse(embed);
             return;
         }
         else {
-            sendResponse(PrefabResponses.improperUsage(event, this.Usage()));
+            sendResponse(PrefabResponses.improperUsage(ctx, this.Usage()));
         }
     }
 }

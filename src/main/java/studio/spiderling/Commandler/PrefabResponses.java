@@ -21,18 +21,17 @@ public class PrefabResponses {
             .addField("Required Permissions:", builder.toString());
     }
 
-    public static EmbedBuilder improperUsage(MessageCreateEvent event, String usage) {
+    public static EmbedBuilder improperUsage(CommandContext ctx, String usage) {
         // ?Would the command description would be viable in this embed.
         return new EmbedBuilder()
             .setColor(Color.YELLOW)
-            .setAuthor(event.getApi().getYourself())
+            .setAuthor(ctx.getApi().getYourself())
             .setTitle("Improper Command Usage")
             .addField("Usage:", usage);
     }
 
     /*
      * TODO: Add bundled prefab responses for:
-     *  - Improper command usage, includes proper command usage + description // DONE
      *  - Errors, or warnings, with custom fields for displaying an error message
      */
 

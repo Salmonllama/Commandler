@@ -2,11 +2,11 @@ package studio.spiderling.Commandler.commands;
 
 import java.util.List;
 
-import org.javacord.api.event.message.MessageCreateEvent;
 
 import java.util.Arrays;
 
 import studio.spiderling.Commandler.Command;
+import studio.spiderling.Commandler.CommandContext;
 import studio.spiderling.Commandler.FrameworkConfig;
 import studio.spiderling.Commandler.FrameworkDB;
 
@@ -25,8 +25,8 @@ public class ForceNewServerCommand extends Command {
     public List<String> Permissions() { return Arrays.asList("ADMINISTRATOR"); }
 
     @Override
-    public void onCommand(MessageCreateEvent event, String[] args) {
-        event.getServer().ifPresent(server -> {
+    public void onCommand(CommandContext ctx) {
+        ctx.getServer().ifPresent(server -> {
             String serverId = server.getIdAsString();
             String prefix = FrameworkConfig.getDefaultPrefix();
 
