@@ -85,4 +85,21 @@ public class CommandRegistry {
             return FrameworkDB.getServerPrefix(serverId);
         }
     }
+
+    /**
+     * Gets a list of unique command categories from the currently registered commands.
+     *
+     * @return A list of currently registered command categories.
+     */
+    public List<String> getCommandCategories() {
+        List<String> categories = new ArrayList<>();
+
+        for (Command cmd : getCommandsList()) {
+            if (!categories.contains(cmd.Category())) {
+                categories.add(cmd.Category());
+            }
+        }
+
+        return categories;
+    }
 }
