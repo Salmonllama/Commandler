@@ -9,7 +9,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.SpiderlingStudio:commandler:VERSION' // Currently 1.3.1
+    implementation 'com.github.SpiderlingStudio:commandler:VERSION' // Currently 1.3.5
 }
 ```
 
