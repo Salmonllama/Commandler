@@ -9,34 +9,40 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
 public abstract class Command implements MessageCreateListener {
 	// TODO: class MessageCreateEvent object to simplify methods and responses
 	private MessageCreateEvent event;
+    private String serverId;
+    private String messageContent;
 
-    public abstract void onCommand(MessageCreateEvent event, String[] args);
-    public abstract List<String> Aliases();
-    public abstract String Description();
     public abstract String Name();
-    public abstract String Usage();
+    public abstract String Description();
     public abstract String Category();
+    public abstract String Usage();
+    public abstract List<String> Aliases();
     public abstract List<String> Permissions();
-
+    public abstract void onCommand(CommandContext context);
+    
     @Override
     public void onMessageCreate(MessageCreateEvent event) {
+        setServerId(event.getServer().isPresent() ? event.getServer().get().getIdAsString() : null);
+        setMessageContent(event.getMessageContent());
+
+        CommandContext context = new CommandContext(event, getCommand(), grabPrefix("server"), getCommandArgs());
+
     	this.event = event;
         if (!isValidSource()) {
             // TODO: Move to isValidSource() to weed out bot users, and blacklisted servers/users (soon tm).
             // Ignore bot users
             return;
         }
-        if (this.event.getMessage().getContent().length() < grabPrefix(this.event.getServer().get().getIdAsString()).length()) {
+        if (getMessageContent().length() < grabPrefix(getServerId()).length()) {
             // Ignore messages that are shorter than the prefix length;
             return;
         }
-        if (!this.event.getMessageContent().substring(0, grabPrefix(this.event.getServer().get().getIdAsString()).length()).equals(grabPrefix(this.event.getServer().get().getIdAsString()))) {
+        if (!getMessageContent().startsWith(grabPrefix(getServerId()))) {
             // TODO: Move to separate method 'startsWithTrigger()' to detect prefixes and bot mentions.
             // Ignore prefixes that aren't in the config or the database
             return;
@@ -49,12 +55,12 @@ public abstract class Command implements MessageCreateListener {
             return;
         }
 
-        this.event.getApi().getThreadPool().getExecutorService().submit(() -> onCommand(this.event, getCommandArgs()));
+        event.getApi().getThreadPool().getExecutorService().submit(() -> onCommand(context));
     }
 
     private String[] cutPrefix() {
-        // Remove the prefix from the command
-        return event.getMessageContent().substring(grabPrefix(this.event.getServer().get().getIdAsString()).length()).split(" ");
+        // Remove the prefix from the command, returns the entire message as a String[]. command alias would be cutPrefix()[0]
+        return getMessageContent().substring(grabPrefix(getServerId()).length()).split(" ");
     }
 
     private boolean isValidSource() {
@@ -63,7 +69,7 @@ public abstract class Command implements MessageCreateListener {
             // Ignore any messages from webhooks
             return false;
         }
-        else if (event.getMessageAuthor().asUser().orElseThrow(AssertionError::new).isBot()) {
+        else if (event.getMessageAuthor().asUser().orElseThrow(AssertionError::new).isBot()) { // Fix this, eh?
             // Ignore bot users
             return false;
         }
@@ -75,9 +81,10 @@ public abstract class Command implements MessageCreateListener {
         // TODO: framework-managed blacklist for users and servers. If user -> ignore. If server -> leave.
     }
 
+    @SuppressWarnings("unused")
     private boolean startsWithTrigger() {
         //! Need to accommodate for cutPrefix(). Remove the bot mention from the command args instead of the prefix. Maybe a separate mention module?
-        if (event.getMessageContent().substring(0, grabPrefix(event.getServer().get().getIdAsString()).length()).equals(grabPrefix(event.getServer().get().getIdAsString()))) {
+        if (getMessageContent().startsWith(grabPrefix(getServerId()))) {
             // Starting with the prefix is a valid trigger. Accounts for prefix length.
             return true;
         }
@@ -91,9 +98,14 @@ public abstract class Command implements MessageCreateListener {
         return false;
     }
 
+    private String getCommand() {
+        // Returns the command alias used to trigger the command.
+        return cutPrefix()[0].toLowerCase();
+    }
+
     private boolean isCommand() {
         // Check if the string is a command or a command alias
-        return Aliases().contains(this.cutPrefix()[0].toLowerCase());
+        return Aliases().contains(getCommand());
     }
 
     private String[] getCommandArgs() {
@@ -126,6 +138,8 @@ public abstract class Command implements MessageCreateListener {
             return true;
         }
 
+        // Condition for ADMINISTRATOR catch all
+
         if (authorPermissions.containsAll(this.Permissions())) {
             // If the message author has all the reqperms, allow usage.
             // All permissions in reqperms are required for command usage to be allowed.
@@ -146,6 +160,24 @@ public abstract class Command implements MessageCreateListener {
         }
     }
 
+    // Getters and setters for private fiels
+    private String getServerId() {
+        return serverId;
+    }
+
+    private void setServerId(String id) {
+        serverId = id;
+    }
+
+    private String getMessageContent() {
+        return messageContent;
+    }
+
+    private void setMessageContent(String content) {
+        messageContent = content;
+    }
+
+    // sendResponse overloads. -> TODO: Move these to CommandContext#reply()
     protected Future<Message> sendResponse(String message) {
         return event.getChannel().sendMessage(message);
     }
