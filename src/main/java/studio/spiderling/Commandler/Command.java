@@ -177,19 +177,38 @@ public abstract class Command implements MessageCreateListener {
         messageContent = content;
     }
 
-    // sendResponse overloads. -> TODO: Move these to CommandContext#reply()
+    /**
+     * @deprecated
+     * Use CommandContext's getChannel variants to send messages.
+     */
+    @Deprecated
     protected Future<Message> sendResponse(String message) {
         return event.getChannel().sendMessage(message);
     }
 
+    /**
+     * @deprecated
+     * Use CommandContext's getChannel variants to send messages.
+     */
+    @Deprecated
     protected Future<Message> sendResponse(EmbedBuilder embed) {
         return event.getChannel().sendMessage(embed);
     }
 
+    /**
+     * @deprecated
+     * Use CommandContext's getChannel variants to send messages.
+     */
+    @Deprecated
     protected Future<Message> sendResponse(File file) {
         return event.getChannel().sendMessage(file);
     }
 
+    /**
+     * @deprecated
+     * Use CommandContext's getChannel variants to send messages.
+     */
+    @Deprecated
     protected Future<Message> sendResponse(File file, String message) {
         return event.getChannel().sendMessage(message, file);
     }
