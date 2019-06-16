@@ -48,7 +48,7 @@ public class FrameworkDB {
             stmt.execute("CREATE TABLE IF NOT EXISTS serverconf"
                             + "(serverId TEXT NOT NULL PRIMARY KEY,"
                             + " prefix TEXT NOT NULL)");
-            System.out.println("serverConf initialised");
+            System.out.println("serverconf initialised");
             stmt.close();
         }
         catch (SQLException e) {
@@ -103,7 +103,7 @@ public class FrameworkDB {
     	Connection conn = connectionSetup();
     	
     	try {
-    		String sql = "UPDATE serverConf SET prefix = ? WHERE serverId = ?";
+    		String sql = "UPDATE serverconf SET prefix = ? WHERE serverId = ?";
     		
     		PreparedStatement stmt = conn.prepareStatement(sql);
     		stmt.setString(1, newPrefix);
