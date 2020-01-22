@@ -1,5 +1,5 @@
 package dev.salmonllama.Commandler;
 
-public class Command {
-    
+public abstract class Command {
+
 }
